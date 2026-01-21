@@ -13,17 +13,17 @@ const signupSchema = z
   .object({
     fullName: z
       .string()
-      .min(2, "Full name must be at least 2 characters"),
-    email: z.string().email("Please enter a valid email address"),
+      .min(2, "El nombre completo debe tener al menos 2 caracteres"),
+    email: z.string().email("Por favor ingresa una dirección de correo electrónico válida"),
     password: z
       .string()
-      .min(6, "Password must be at least 6 characters"),
+      .min(6, "La contraseña debe tener al menos 6 caracteres"),
     confirmPassword: z
       .string()
-      .min(6, "Please confirm your password"),
+      .min(6, "Por favor confirma tu contraseña"),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+    message: "Las contraseñas no coinciden",
     path: ["confirmPassword"],
   });
 
@@ -91,9 +91,9 @@ export default function SignupPage() {
         <div className="bg-white rounded-2xl shadow-lg p-8 space-y-8">
           {/* Header */}
           <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold text-slate-900">Create Account</h1>
+            <h1 className="text-3xl font-bold text-slate-900">Crear Cuenta</h1>
             <p className="text-slate-600">
-              Sign up to get started with our services
+              Regístrate para comenzar con nuestros servicios
             </p>
           </div>
 
@@ -105,7 +105,7 @@ export default function SignupPage() {
                 htmlFor="fullName"
                 className="block text-sm font-semibold text-slate-900"
               >
-                Full Name
+                Nombre Completo
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-3.5 text-slate-400 w-5 h-5" />
@@ -130,7 +130,7 @@ export default function SignupPage() {
                 htmlFor="email"
                 className="block text-sm font-semibold text-slate-900"
               >
-                Email Address
+                Correo Electrónico
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3.5 text-slate-400 w-5 h-5" />
@@ -155,7 +155,7 @@ export default function SignupPage() {
                 htmlFor="password"
                 className="block text-sm font-semibold text-slate-900"
               >
-                Password
+                Contraseña
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3.5 text-slate-400 w-5 h-5" />
@@ -180,7 +180,7 @@ export default function SignupPage() {
                 htmlFor="confirmPassword"
                 className="block text-sm font-semibold text-slate-900"
               >
-                Confirm Password
+                Confirmar Contraseña
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3.5 text-slate-400 w-5 h-5" />
@@ -215,10 +215,10 @@ export default function SignupPage() {
               {isLoading ? (
                 <>
                   <Loader className="w-5 h-5 animate-spin" />
-                  <span>Creating account...</span>
+                  <span>Creando cuenta...</span>
                 </>
               ) : (
-                "Sign Up"
+                "Registrarse"
               )}
             </button>
           </form>
@@ -226,13 +226,13 @@ export default function SignupPage() {
           {/* Footer */}
           <div className="text-center text-sm">
             <p className="text-slate-600">
-              Already have an account?{" "}
+              ¿Ya tienes una cuenta?{" "}
               <button
                 type="button"
                 onClick={() => router.push("/login")}
                 className="text-green-600 hover:text-green-700 font-semibold transition-colors"
               >
-                Sign in
+                Inicia sesión
               </button>
             </p>
           </div>
@@ -240,7 +240,7 @@ export default function SignupPage() {
 
         {/* Additional Info */}
         <div className="mt-6 text-center text-sm text-slate-500">
-          <p>Protected by Supabase Authentication</p>
+          <p>Protegido por Autenticación de Supabase</p>
         </div>
       </div>
     </div>

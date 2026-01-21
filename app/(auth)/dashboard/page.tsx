@@ -61,8 +61,8 @@ const addServiceSchema = z.object({
   provider: z.nativeEnum(ServiceProvider),
   accountNumber: z
     .string()
-    .min(1, "Account number is required")
-    .regex(/^[0-9A-Za-z\-]+$/, "Account number must be alphanumeric"),
+    .min(1, "El número de cuenta es requerido")
+    .regex(/^[0-9A-Za-z\-]+$/, "El número de cuenta debe ser alfanumérico"),
   alias: z.string().optional(),
 });
 
@@ -213,7 +213,7 @@ function ServiceCard({ service }: ServiceCardProps) {
       {/* Monthly Grid */}
       <div className="space-y-2">
         <p className="text-xs font-semibold text-slate-600 uppercase">
-          Bill Status 2026
+          Estado de Facturas 2026
         </p>
         <div className="grid grid-cols-12 gap-1">
           {service.bills.map((bill, idx) => {
@@ -260,7 +260,7 @@ function ServiceCard({ service }: ServiceCardProps) {
       {/* Total Debt */}
       <div className="pt-2 border-t border-slate-200">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-slate-600">Total Debt:</span>
+          <span className="text-sm font-medium text-slate-600">Deuda Total:</span>
           <span
             className={`text-lg font-bold ${
               totalDebt > 0 ? "text-red-600" : "text-green-600"
@@ -304,7 +304,7 @@ function AddServiceDialog({
       <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-slate-900">Add New Service</h2>
+          <h2 className="text-2xl font-bold text-slate-900">Añadir Nuevo Servicio</h2>
           <button
             onClick={onClose}
             disabled={isLoading}
@@ -322,19 +322,19 @@ function AddServiceDialog({
               htmlFor="provider"
               className="block text-sm font-semibold text-slate-900"
             >
-              Service Provider
+              Proveedor de Servicios
             </label>
             <select
               id="provider"
               {...register("provider")}
               className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-slate-900 bg-white transition-all"
             >
-              <option value="">Select a provider...</option>
-              <option value={ServiceProvider.AYSAM}>AYSAM (Water)</option>
+              <option value="">Selecciona un proveedor...</option>
+              <option value={ServiceProvider.AYSAM}>AYSAM (Agua)</option>
               <option value={ServiceProvider.ECOGAS_CUYANA}>
                 ECOGAS CUYANA (Gas)
               </option>
-              <option value={ServiceProvider.EDEMSA}>EDEMSA (Electricity)</option>
+              <option value={ServiceProvider.EDEMSA}>EDEMSA (Electricidad)</option>
             </select>
             {errors.provider && (
               <p className="text-red-500 text-sm font-medium">
@@ -349,12 +349,12 @@ function AddServiceDialog({
               htmlFor="accountNumber"
               className="block text-sm font-semibold text-slate-900"
             >
-              Account Number
+              Número de Cuenta
             </label>
             <input
               id="accountNumber"
               type="text"
-              placeholder="Enter your account number"
+              placeholder="Ingresa tu número de cuenta"
               {...register("accountNumber")}
               className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-slate-900 placeholder-slate-400 transition-all"
             />
@@ -371,12 +371,12 @@ function AddServiceDialog({
               htmlFor="alias"
               className="block text-sm font-semibold text-slate-900"
             >
-              Alias (Optional)
+              Alias (Opcional)
             </label>
             <input
               id="alias"
               type="text"
-              placeholder="e.g., Home, Office"
+              placeholder="p. ej., Casa, Oficina"
               {...register("alias")}
               className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-slate-900 placeholder-slate-400 transition-all"
             />
@@ -390,7 +390,7 @@ function AddServiceDialog({
               disabled={isLoading}
               className="flex-1 px-4 py-2.5 border border-slate-300 text-slate-900 font-semibold rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-50"
             >
-              Cancel
+              Cancelar
             </button>
             <button
               type="submit"
@@ -400,10 +400,10 @@ function AddServiceDialog({
               {isLoading ? (
                 <>
                   <Loader className="w-5 h-5 animate-spin" />
-                  <span>Adding...</span>
+                  <span>Añadiendo...</span>
                 </>
               ) : (
-                "Add Service"
+                "Añadir Servicio"
               )}
             </button>
           </div>
@@ -472,7 +472,7 @@ export default function DashboardPage() {
       setError(null);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Failed to add service"
+        err instanceof Error ? err.message : "Error al añadir el servicio"
       );
     } finally {
       setIsAddingService(false);
@@ -507,10 +507,10 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-slate-900">
-                Welcome, {userName}!
+                Bienvenido, {userName}!
               </h1>
               <p className="text-slate-600 mt-1">
-                Manage your utility services and track payments
+                Gestiona tus servicios de utilidad y rastrea pagos
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -519,12 +519,12 @@ export default function DashboardPage() {
                 className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-6 rounded-lg transition-colors flex items-center gap-2"
               >
                 <Plus className="w-5 h-5" />
-                Add Service
+                Añadir Servicio
               </button>
               <button
                 onClick={handleLogout}
                 className="bg-slate-200 hover:bg-slate-300 text-slate-900 font-semibold py-2.5 px-4 rounded-lg transition-colors"
-                title="Logout"
+                title="Cerrar sesión"
               >
                 <LogOut className="w-5 h-5" />
               </button>
@@ -548,17 +548,17 @@ export default function DashboardPage() {
           <div className="text-center py-12">
             <HelpCircle className="w-16 h-16 text-slate-300 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-slate-900 mb-2">
-              No services yet
+              Sin servicios aún
             </h2>
             <p className="text-slate-600 mb-6">
-              Add your first service to start tracking payments
+              Añade tu primer servicio para comenzar a rastrear pagos
             </p>
             <button
               onClick={() => setIsDialogOpen(true)}
               className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-6 rounded-lg transition-colors inline-flex items-center gap-2"
             >
               <Plus className="w-5 h-5" />
-              Add Service
+              Añadir Servicio
             </button>
           </div>
         ) : (
@@ -567,15 +567,15 @@ export default function DashboardPage() {
             <div className="bg-white rounded-lg p-4 mb-8 border border-slate-200">
               <div className="flex items-center gap-2 text-sm text-slate-600">
                 <CheckCircle className="w-5 h-5 text-green-600" />
-                <span>Green = Paid</span>
+                <span>Verde = Pagado</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-slate-600 mt-2">
                 <AlertCircle className="w-5 h-5 text-red-600" />
-                <span>Red = Pending</span>
+                <span>Rojo = Pendiente</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-slate-600 mt-2">
                 <div className="w-4 h-4 bg-slate-100 border border-slate-200 rounded-sm" />
-                <span>Gray = Future/Unknown</span>
+                <span>Gris = Futuro/Desconocido</span>
               </div>
             </div>
 

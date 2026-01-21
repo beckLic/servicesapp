@@ -10,10 +10,10 @@ import { createClient } from "@/lib/supabase/client";
 
 // Zod schema for validation
 const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email("Por favor ingresa una dirección de correo electrónico válida"),
   password: z
     .string()
-    .min(6, "Password must be at least 6 characters"),
+    .min(6, "La contraseña debe tener al menos 6 caracteres"),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -72,9 +72,9 @@ export default function LoginPage() {
         <div className="bg-white rounded-2xl shadow-lg p-8 space-y-8">
           {/* Header */}
           <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold text-slate-900">Welcome Back</h1>
+            <h1 className="text-3xl font-bold text-slate-900">Bienvenido de Vuelta</h1>
             <p className="text-slate-600">
-              Sign in to your account to continue
+              Inicia sesión en tu cuenta para continuar
             </p>
           </div>
 
@@ -86,7 +86,7 @@ export default function LoginPage() {
                 htmlFor="email"
                 className="block text-sm font-semibold text-slate-900"
               >
-                Email Address
+                Correo Electrónico
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3.5 text-slate-400 w-5 h-5" />
@@ -111,7 +111,7 @@ export default function LoginPage() {
                 htmlFor="password"
                 className="block text-sm font-semibold text-slate-900"
               >
-                Password
+                Contraseña
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3.5 text-slate-400 w-5 h-5" />
@@ -146,10 +146,10 @@ export default function LoginPage() {
               {isLoading ? (
                 <>
                   <Loader className="w-5 h-5 animate-spin" />
-                  <span>Signing in...</span>
+                  <span>Iniciando sesión...</span>
                 </>
               ) : (
-                "Sign In"
+                "Iniciar Sesión"
               )}
             </button>
           </form>
@@ -157,13 +157,13 @@ export default function LoginPage() {
           {/* Footer */}
           <div className="text-center text-sm">
             <p className="text-slate-600">
-              Don't have an account?{" "}
+              ¿No tienes una cuenta?{" "}
               <button
                 type="button"
                 onClick={() => router.push("/signup")}
                 className="text-green-600 hover:text-green-700 font-semibold transition-colors"
               >
-                Sign up
+                Regístrate
               </button>
             </p>
           </div>
@@ -171,7 +171,7 @@ export default function LoginPage() {
 
         {/* Additional Info */}
         <div className="mt-6 text-center text-sm text-slate-500">
-          <p>Protected by Supabase Authentication</p>
+          <p>Protegido por Autenticación de Supabase</p>
         </div>
       </div>
     </div>
