@@ -2,7 +2,6 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// 1. IMPORTANTE: La función ahora se debe llamar 'proxy'
 export async function proxy(req: NextRequest) {
   const res = NextResponse.next();
   const supabase = createServerClient(

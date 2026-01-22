@@ -77,10 +77,10 @@ const mockServices: ServiceAccount[] = [
     accountNumber: "1234567",
     alias: "Home Water",
     bills: [
-      { month: 1, year: 2026, status: BillStatus.PAID, amount: 150 },
-      { month: 2, year: 2026, status: BillStatus.PAID, amount: 160 },
-      { month: 3, year: 2026, status: BillStatus.PENDING, amount: 155 },
-      { month: 4, year: 2026, status: BillStatus.PENDING, amount: 165 },
+      { month: 1, year: 2026, status: BillStatus.PAID, amount: 15000 },
+      { month: 2, year: 2026, status: BillStatus.PAID, amount: 16000 },
+      { month: 3, year: 2026, status: BillStatus.PENDING, amount: 15500 },
+      { month: 4, year: 2026, status: BillStatus.PENDING, amount: 16500 },
       { month: 5, year: 2026, status: BillStatus.FUTURE },
       { month: 6, year: 2026, status: BillStatus.FUTURE },
       { month: 7, year: 2026, status: BillStatus.FUTURE },
@@ -97,11 +97,11 @@ const mockServices: ServiceAccount[] = [
     accountNumber: "9876543",
     alias: "Home Gas",
     bills: [
-      { month: 1, year: 2026, status: BillStatus.PAID, amount: 200 },
-      { month: 2, year: 2026, status: BillStatus.PAID, amount: 215 },
-      { month: 3, year: 2026, status: BillStatus.PAID, amount: 210 },
-      { month: 4, year: 2026, status: BillStatus.PENDING, amount: 220 },
-      { month: 5, year: 2026, status: BillStatus.PENDING, amount: 225 },
+      { month: 1, year: 2026, status: BillStatus.PAID, amount: 45000 },
+      { month: 2, year: 2026, status: BillStatus.PAID, amount: 52000 },
+      { month: 3, year: 2026, status: BillStatus.PAID, amount: 48000 },
+      { month: 4, year: 2026, status: BillStatus.PENDING, amount: 55000 },
+      { month: 5, year: 2026, status: BillStatus.PENDING, amount: 60000 },
       { month: 6, year: 2026, status: BillStatus.FUTURE },
       { month: 7, year: 2026, status: BillStatus.FUTURE },
       { month: 8, year: 2026, status: BillStatus.FUTURE },
@@ -117,11 +117,11 @@ const mockServices: ServiceAccount[] = [
     accountNumber: "5555555",
     alias: "Home Electricity",
     bills: [
-      { month: 1, year: 2026, status: BillStatus.PAID, amount: 300 },
-      { month: 2, year: 2026, status: BillStatus.PAID, amount: 320 },
-      { month: 3, year: 2026, status: BillStatus.PAID, amount: 310 },
-      { month: 4, year: 2026, status: BillStatus.PAID, amount: 330 },
-      { month: 5, year: 2026, status: BillStatus.PENDING, amount: 340 },
+      { month: 1, year: 2026, status: BillStatus.PAID, amount: 75500 },
+      { month: 2, year: 2026, status: BillStatus.PAID, amount: 80000 },
+      { month: 3, year: 2026, status: BillStatus.PAID, amount: 78000 },
+      { month: 4, year: 2026, status: BillStatus.PAID, amount: 82000 },
+      { month: 5, year: 2026, status: BillStatus.PENDING, amount: 85000 },
       { month: 6, year: 2026, status: BillStatus.FUTURE },
       { month: 7, year: 2026, status: BillStatus.FUTURE },
       { month: 8, year: 2026, status: BillStatus.FUTURE },
@@ -215,7 +215,7 @@ function ServiceCard({ service }: ServiceCardProps) {
         <p className="text-xs font-semibold text-slate-600 uppercase">
           Estado de Facturas 2026
         </p>
-        <div className="grid grid-cols-12 gap-1">
+        <div className="grid grid-cols-3 gap-2">
           {service.bills.map((bill, idx) => {
             const isDebt = bill.status === BillStatus.PENDING;
             const isPaid = bill.status === BillStatus.PAID;
@@ -228,28 +228,37 @@ function ServiceCard({ service }: ServiceCardProps) {
                 title={`${monthNames[bill.month - 1]} ${bill.year}: ${bill.status}${bill.amount ? ` - $${bill.amount}` : ""}`}
               >
                 {isPaid && (
-                  <div className="w-full h-8 bg-green-100 rounded-sm border border-green-300 flex items-center justify-center cursor-pointer hover:bg-green-200 transition-colors">
-                    <CheckCircle className="w-4 h-4 text-green-600" />
+                  <div className="w-full bg-green-100 rounded-sm border border-green-300 flex flex-col items-center justify-center px-2 py-2 cursor-pointer hover:bg-green-200 transition-colors">
+                    <CheckCircle className="w-4 h-4 text-green-600 mb-1" />
+                    <span className="text-[10px] text-green-700 font-medium">
+                      {monthNames[bill.month - 1]}
+                    </span>
                   </div>
                 )}
                 {isDebt && (
-                  <div className="w-full h-8 bg-red-100 rounded-sm border border-red-300 flex items-center justify-center cursor-pointer hover:bg-red-200 transition-colors">
+                  <div className="w-full bg-red-100 rounded-sm border border-red-300 flex flex-col items-center justify-center px-2 py-2 cursor-pointer hover:bg-red-200 transition-colors min-h-[3.5rem]">
+                    <span className="text-[10px] text-red-600 font-medium">
+                      {monthNames[bill.month - 1]}
+                    </span>
                     {bill.amount && (
-                      <span className="text-xs font-semibold text-red-700">
-                        ${bill.amount}
+                      <span className="text-sm font-bold text-red-700 mt-1 break-words text-center">
+                        ${bill.amount.toLocaleString()}
                       </span>
                     )}
                   </div>
                 )}
                 {isFuture && (
-                  <div className="w-full h-8 bg-slate-100 rounded-sm border border-slate-200 flex items-center justify-center cursor-pointer hover:bg-slate-200 transition-colors">
-                    <span className="text-xs text-slate-400">-</span>
+                  <div className="w-full bg-slate-100 rounded-sm border border-slate-200 flex flex-col items-center justify-center px-2 py-2 cursor-pointer hover:bg-slate-200 transition-colors">
+                    <span className="text-[10px] text-slate-500 font-medium">
+                      {monthNames[bill.month - 1]}
+                    </span>
+                    <span className="text-xs text-slate-400 mt-1">-</span>
                   </div>
                 )}
 
                 {/* Tooltip */}
                 <div className="absolute z-10 bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
-                  {monthNames[bill.month - 1]}
+                  {monthNames[bill.month - 1]} {bill.year}
                 </div>
               </div>
             );
