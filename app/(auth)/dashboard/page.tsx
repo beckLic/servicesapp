@@ -75,47 +75,59 @@ const mockServices: ServiceAccount[] = [
     id: "1",
     provider: ServiceProvider.AYSAM,
     accountNumber: "1234567",
-    alias: "Home Water",
+    alias: "Home Water - Case A (Debt in Past)",
     bills: [
       { month: 1, year: 2026, status: BillStatus.PAID, amount: 15000 },
       { month: 2, year: 2026, status: BillStatus.PAID, amount: 16000 },
-      { month: 3, year: 2026, status: BillStatus.PENDING, amount: 15500 },
-      { month: 4, year: 2026, status: BillStatus.PENDING, amount: 16500 },
-      { month: 5, year: 2026, status: BillStatus.FUTURE },
-      { month: 6, year: 2026, status: BillStatus.FUTURE },
-      { month: 7, year: 2026, status: BillStatus.FUTURE },
-      { month: 8, year: 2026, status: BillStatus.FUTURE },
-      { month: 9, year: 2026, status: BillStatus.FUTURE },
-      { month: 10, year: 2026, status: BillStatus.FUTURE },
-      { month: 11, year: 2026, status: BillStatus.FUTURE },
-      { month: 12, year: 2026, status: BillStatus.FUTURE },
+      { month: 3, year: 2026, status: BillStatus.PAID, amount: 15500 },
+      { month: 4, year: 2026, status: BillStatus.PAID, amount: 16500 },
+      { month: 5, year: 2026, status: BillStatus.PAID, amount: 14800 },
+      { month: 6, year: 2026, status: BillStatus.PAID, amount: 15200 },
+      { month: 7, year: 2026, status: BillStatus.PAID, amount: 16100 },
+      { month: 8, year: 2026, status: BillStatus.PAID, amount: 15900 },
+      { month: 9, year: 2026, status: BillStatus.PAID, amount: 16300 },
+      { month: 10, year: 2026, status: BillStatus.PAID, amount: 15700 },
+      { month: 11, year: 2026, status: BillStatus.PAID, amount: 16200 },
+      { month: 12, year: 2026, status: BillStatus.PENDING, amount: 18500 },
     ],
   },
   {
     id: "2",
     provider: ServiceProvider.ECOGAS_CUYANA,
     accountNumber: "9876543",
-    alias: "Home Gas",
+    alias: "Home Gas - Case B (Clean Slate)",
     bills: [
       { month: 1, year: 2026, status: BillStatus.PAID, amount: 45000 },
       { month: 2, year: 2026, status: BillStatus.PAID, amount: 52000 },
       { month: 3, year: 2026, status: BillStatus.PAID, amount: 48000 },
-      { month: 4, year: 2026, status: BillStatus.PENDING, amount: 55000 },
-      { month: 5, year: 2026, status: BillStatus.PENDING, amount: 60000 },
-      { month: 6, year: 2026, status: BillStatus.FUTURE },
-      { month: 7, year: 2026, status: BillStatus.FUTURE },
-      { month: 8, year: 2026, status: BillStatus.FUTURE },
-      { month: 9, year: 2026, status: BillStatus.FUTURE },
-      { month: 10, year: 2026, status: BillStatus.FUTURE },
-      { month: 11, year: 2026, status: BillStatus.FUTURE },
-      { month: 12, year: 2026, status: BillStatus.FUTURE },
+      { month: 4, year: 2026, status: BillStatus.PAID, amount: 50000 },
+      { month: 5, year: 2026, status: BillStatus.PAID, amount: 60000 },
+      { month: 6, year: 2026, status: BillStatus.PAID, amount: 55000 },
+      { month: 7, year: 2026, status: BillStatus.PAID, amount: 58000 },
+      { month: 8, year: 2026, status: BillStatus.PAID, amount: 62000 },
+      { month: 9, year: 2026, status: BillStatus.PAID, amount: 59000 },
+      { month: 10, year: 2026, status: BillStatus.PAID, amount: 61000 },
+      { month: 11, year: 2026, status: BillStatus.PAID, amount: 63000 },
+      { month: 12, year: 2026, status: BillStatus.PAID, amount: 65000 },
+      { month: 1, year: 2027, status: BillStatus.PENDING, amount: 68000 },
+      { month: 2, year: 2027, status: BillStatus.PENDING, amount: 70000 },
+      { month: 3, year: 2027, status: BillStatus.FUTURE },
+      { month: 4, year: 2027, status: BillStatus.FUTURE },
+      { month: 5, year: 2027, status: BillStatus.FUTURE },
+      { month: 6, year: 2027, status: BillStatus.FUTURE },
+      { month: 7, year: 2027, status: BillStatus.FUTURE },
+      { month: 8, year: 2027, status: BillStatus.FUTURE },
+      { month: 9, year: 2027, status: BillStatus.FUTURE },
+      { month: 10, year: 2027, status: BillStatus.FUTURE },
+      { month: 11, year: 2027, status: BillStatus.FUTURE },
+      { month: 12, year: 2027, status: BillStatus.FUTURE },
     ],
   },
   {
     id: "3",
     provider: ServiceProvider.EDEMSA,
     accountNumber: "5555555",
-    alias: "Home Electricity",
+    alias: "Home Electricity - Mixed Status",
     bills: [
       { month: 1, year: 2026, status: BillStatus.PAID, amount: 75500 },
       { month: 2, year: 2026, status: BillStatus.PAID, amount: 80000 },
@@ -181,6 +193,31 @@ const calculateTotalDebt = (bills: Bill[]): number => {
   }, 0);
 };
 
+const getActiveYear = (bills: Bill[]): number => {
+  // Get all unique years sorted ascending
+  const years = Array.from(new Set(bills.map((bill) => bill.year))).sort(
+    (a, b) => a - b
+  );
+
+  if (years.length === 0) {
+    return new Date().getFullYear();
+  }
+
+  // Find the earliest year with unpaid debt (PENDING)
+  for (const year of years) {
+    const yearBills = bills.filter((bill) => bill.year === year);
+    const hasUnpaid = yearBills.some(
+      (bill) => bill.status === BillStatus.PENDING
+    );
+    if (hasUnpaid) {
+      return year;
+    }
+  }
+
+  // If all years are fully paid, return the latest year
+  return years[years.length - 1];
+};
+
 // ==================== Service Card Component ====================
 
 interface ServiceCardProps {
@@ -188,7 +225,9 @@ interface ServiceCardProps {
 }
 
 function ServiceCard({ service }: ServiceCardProps) {
-  const totalDebt = calculateTotalDebt(service.bills);
+  const activeYear = getActiveYear(service.bills);
+  const yearBills = service.bills.filter((bill) => bill.year === activeYear);
+  const totalDebt = calculateTotalDebt(yearBills);
 
   return (
     <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow p-6 space-y-4">
@@ -213,10 +252,10 @@ function ServiceCard({ service }: ServiceCardProps) {
       {/* Monthly Grid */}
       <div className="space-y-2">
         <p className="text-xs font-semibold text-slate-600 uppercase">
-          Estado de Facturas 2026
+          Bill Status {activeYear}
         </p>
         <div className="grid grid-cols-3 gap-2">
-          {service.bills.map((bill, idx) => {
+          {yearBills.map((bill, idx) => {
             const isDebt = bill.status === BillStatus.PENDING;
             const isPaid = bill.status === BillStatus.PAID;
             const isFuture = bill.status === BillStatus.FUTURE;
@@ -269,7 +308,7 @@ function ServiceCard({ service }: ServiceCardProps) {
       {/* Total Debt */}
       <div className="pt-2 border-t border-slate-200">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-slate-600">Deuda Total:</span>
+          <span className="text-sm font-medium text-slate-600">Deuda Total {activeYear}:</span>
           <span
             className={`text-lg font-bold ${
               totalDebt > 0 ? "text-red-600" : "text-green-600"
